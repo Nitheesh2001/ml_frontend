@@ -29,3 +29,9 @@ def details(request):
 
 def cadidate(request):
     return render(request,'cadidate.html')
+
+def about(request):
+    return render(request,'about.html')
+
+def contact(request):
+    return render(request,'contact.html')
