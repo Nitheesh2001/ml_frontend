@@ -20,13 +20,13 @@ def details(request):
         messages.success(request, "Your Message Has Been Sent!")
     return render(request, 'details.html')
 
+
+
 def cadidate(request):
+    details = Details.objects.last()  # Get the latest Details object
     if request.method == "POST":
-        print("######")
         form = CandidateForm(request.POST, request.FILES)
-        print("######")
         if form.is_valid():
-            print("######")
             form.save()
             messages.success(request, "Candidate details have been saved successfully!")
             return redirect('home')
@@ -37,7 +37,7 @@ def cadidate(request):
                     messages.error(request, f"Error in {field}: {error}")
     else:
         form = CandidateForm()  # Initialize empty form
-    context = {'form': form}
+    context = {'form': form, 'subject': details.subject if details else None}
     return render(request, 'cadidate.html', context)
 
 def cadidate_details(request):
