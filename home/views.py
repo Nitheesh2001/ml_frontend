@@ -23,13 +23,12 @@ def details(request):
 
 
 def cadidate(request):
-    details = Details.objects.last()  # Get the latest Details object
     if request.method == "POST":
         form = CandidateForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Candidate details have been saved successfully!")
-            return redirect('home')
+            return redirect('cadidate')  # Redirect to the same page after form submission
         else:
             # Display form errors if validation fails
             for field, errors in form.errors.items():
@@ -37,7 +36,12 @@ def cadidate(request):
                     messages.error(request, f"Error in {field}: {error}")
     else:
         form = CandidateForm()  # Initialize empty form
-    context = {'form': form, 'subject': details.subject if details else None}
+    
+    success_message = request.session.get('success_message')
+    if success_message:
+        del request.session['success_message']  # Remove the success message from session after displaying it
+    
+    context = {'form': form, 'success_message': success_message}
     return render(request, 'cadidate.html', context)
 
 def cadidate_details(request):
